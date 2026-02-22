@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+motor
+pymongo[srv]
+pandas
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt
+openpyxl
+pydantic-settings
+email-validator
+python-dotenv
+cryptography
+dnspython

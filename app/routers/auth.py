@@ -46,17 +46,21 @@ async def create_user(user_in: UserCreate, current_user: User = Depends(get_curr
 
 @router.on_event("startup")
 async def create_initial_admin():
-    # Check if admin exists, if not create one
-    admin = await db.users.find_one({"role": "admin"})
-    if not admin:
-        hashed_password = get_password_hash("admin123")
-        admin_user = {
-            "username": "admin",
-            "email": "admin@example.com",
-            "full_name": "System Admin",
-            "password_hash": hashed_password,
-            "role": "admin",
-            "disabled": False
-        }
-        await db.users.insert_one(admin_user)
-        print("Admin user created: admin / admin123")
+    try:
+        # Check if admin exists, if not create one
+        admin = await db.users.find_one({"role": "admin"})
+        if not admin:
+            hashed_password = get_password_hash("admin123")
+            admin_user = {
+                "username": "admin",
+                "email": "admin@example.com",
+                "full_name": "System Admin",
+                "password_hash": hashed_password,
+                "role": "admin",
+                "disabled": False
+            }
+            await db.users.insert_one(admin_user)
+            print("Admin user created: admin / admin123")
+    except Exception as e:
+        print(f"CRITICAL: Failed to create initial admin or connect to database: {e}")
+        print("The app will still start, but database features may fail.")
